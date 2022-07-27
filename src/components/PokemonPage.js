@@ -6,7 +6,6 @@ import { Container } from "semantic-ui-react";
 
 function PokemonPage() {
   const [pokemon, setPokemon] = useState([])
-
   const [search, setSearch] = useState('')
 
 
@@ -28,7 +27,7 @@ function PokemonPage() {
       <br />
       <PokemonForm onAddPokemon = {handleAddPokemon}/>
       <br />
-      <Search  search={search} onChange={setSearch}/>
+      <Search  search={search} setSearch={setSearch}/>
       <br />
       <PokemonCollection pokemon = {pokemonDisplay}/>
     </Container>
