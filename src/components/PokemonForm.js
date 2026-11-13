@@ -1,38 +1,40 @@
 import React, {useState} from "react";
 import { Form } from "semantic-ui-react";
 
+const emptyForm = { name: "", hp: "", urlFront: "", urlBack: "" };
+
 function PokemonForm({onAddPokemon}) {
-  const [data, setData] = useState({
-    name: '', hp:'',urlFront:'', urlBack: ''
-  })
+  const [data, setData] = useState(emptyForm)
 
   function handleChange(event){
     setData({...data, [event.target.name]: event.target.value})
   }
 
   function handleSubmit(event) {
-    
-    
+    event.preventDefault()
+
     const newPokemon = {
       name: data.name,
-      hp: data.hp,
-      sprites: 
-      {front: data.urlFront,
-        back: data.urlBack
+      hp: Number(data.hp),
+      sprites: {
+        front: data.urlFront,
+        back: data.urlBack,
       },
     }
-  
 
-  fetch("http://localhost:3001/pokemon", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newPokemon),
-  })
-    .then((res) => res.json())
-    .then(onAddPokemon);
-}
+    fetch("http://localhost:3001/pokemon", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newPokemon),
+    })
+      .then((res) => res.json())
+      .then((savedPokemon) => {
+        onAddPokemon(savedPokemon)
+        setData(emptyForm)
+      });
+  }
 
 return (
     <div>
@@ -59,7 +61,7 @@ return (
             fluid
             label="Front Image URL"
             placeholder="url"
-            name="frontUrl"
+            name="urlFront"
             value={data.urlFront}
             onChange={handleChange}
           />
@@ -67,7 +69,7 @@ return (
             fluid
             label="Back Image URL"
             placeholder="url"
-            name="backUrl"
+            name="urlBack"
             value={data.urlBack}
             onChange={handleChange}
           />
